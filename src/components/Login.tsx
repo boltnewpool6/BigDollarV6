@@ -90,12 +90,6 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
               {isLoading ? '🔄 Signing In...' : '🚀 Enter the Magic!'}
             </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-xs text-blue-200 font-medium">
-              Demo credentials: admin / bigdollar2025
-            </p>
-          </div>
         </div>
       </div>
     </div>

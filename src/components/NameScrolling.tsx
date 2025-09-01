@@ -46,8 +46,8 @@ export const NameScrolling: React.FC<NameScrollingProps> = ({
     const startScrolling = () => {
       let nameIndex = 0;
       let scrollDuration = 0;
-      const scrollSpeed = 50; // Much faster scrolling - 50ms intervals
-      const totalScrollTime = 5000; // 5 seconds of scrolling
+      const scrollSpeed = 80; // Slower for better visibility
+      const totalScrollTime = 6000; // 6 seconds of scrolling
       
       const scrollNames = () => {
         if (guides.length > 0) {
@@ -180,8 +180,8 @@ export const NameScrolling: React.FC<NameScrollingProps> = ({
           </motion.h2>
         )}
 
-        {/* Main Display Box */}
-        <div className="bg-white/20 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/30 shadow-2xl min-h-[300px] flex items-center justify-center">
+        {/* Main Display Box - Enhanced for better name scrolling visibility */}
+        <div className="bg-white/20 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/30 shadow-2xl min-h-[400px] flex items-center justify-center">
           <div className="w-full">
             {phase === 'delay' && (
               <motion.div
@@ -202,47 +202,74 @@ export const NameScrolling: React.FC<NameScrollingProps> = ({
             )}
 
             {phase === 'scrolling' && currentGuide && (
-              <AnimatePresence mode="wait">
+              <div className="text-center">
+                <div className="mb-6">
+                  <motion.div
+                    key={`scrolling-${currentGuide.id}`}
+                    initial={{ 
+                      y: 50,
+                      opacity: 0,
+                      scale: 0.9,
+                      rotateX: 45
+                    }}
+                    animate={{ 
+                      y: 0,
+                      opacity: 1,
+                      scale: 1,
+                      rotateX: 0
+                    }}
+                    exit={{ 
+                      y: -50,
+                      opacity: 0,
+                      scale: 0.9,
+                      rotateX: -45
+                    }}
+                    transition={{ 
+                      duration: 0.3,
+                      ease: "easeInOut"
+                    }}
+                    className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 border border-white/40 shadow-lg"
+                  >
+                    <div className="text-3xl md:text-4xl font-bold text-white mb-3">
+                      {currentGuide.name}
+                    </div>
+                    <div className="text-xl text-blue-200 mb-2">
+                      {currentGuide.department}
+                    </div>
+                    <div className="text-lg text-blue-300 mb-3">
+                      Supervisor: {currentGuide.supervisor}
+                    </div>
+                    <div className="flex justify-center space-x-4 text-sm">
+                      <div className="bg-white/20 rounded-lg px-3 py-2">
+                        <span className="text-yellow-300 font-semibold">
+                          {currentGuide.totalTickets} tickets
+                        </span>
+                      </div>
+                      <div className="bg-white/20 rounded-lg px-3 py-2">
+                        <span className="text-green-300 font-semibold">
+                          NPS: {currentGuide.nps}
+                        </span>
+                      </div>
+                      <div className="bg-white/20 rounded-lg px-3 py-2">
+                        <span className="text-blue-300 font-semibold">
+                          NRPC: {currentGuide.nrpc}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+                
                 <motion.div
-                  key={currentGuide.id}
-                  initial={{ 
-                    y: 100,
-                    opacity: 0,
-                    scale: 0.8,
-                    rotateX: 90
-                  }}
                   animate={{ 
-                    y: 0,
-                    opacity: 1,
-                    scale: 1,
-                    rotateX: 0
+                    scale: [1, 1.1, 1],
+                    opacity: [0.6, 1, 0.6]
                   }}
-                  exit={{ 
-                    y: -100,
-                    opacity: 0,
-                    scale: 0.8,
-                    rotateX: -90
-                  }}
-                  transition={{ 
-                    duration: 0.15,
-                    ease: "easeInOut"
-                  }}
-                  className="text-center"
+                  transition={{ duration: 0.8, repeat: Infinity }}
+                  className="text-yellow-300 text-lg font-semibold"
                 >
-                  <div className="text-2xl md:text-3xl font-bold text-white mb-2">
-                    {currentGuide.name}
-                  </div>
-                  <div className="text-lg text-blue-200 mb-1">
-                    {currentGuide.department}
-                  </div>
-                  <div className="text-md text-blue-300">
-                    Supervisor: {currentGuide.supervisor}
-                  </div>
-                  <div className="text-sm text-yellow-300 mt-2">
-                    {currentGuide.totalTickets} tickets • NPS: {currentGuide.nps}
-                  </div>
+                  ✨ Cycling through all guides... ✨
                 </motion.div>
-              </AnimatePresence>
+              </div>
             )}
 
             {phase === 'selecting' && selectedWinners[currentWinnerIndex] && (
@@ -268,30 +295,32 @@ export const NameScrolling: React.FC<NameScrollingProps> = ({
                 <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent mb-4">
                   🏆 WINNER #{currentWinnerIndex + 1} 🏆
                 </div>
-                <div className="text-3xl md:text-4xl font-bold text-white mb-3">
-                  {selectedWinners[currentWinnerIndex].name}
-                </div>
-                <div className="text-xl text-blue-200 mb-2">
-                  {selectedWinners[currentWinnerIndex].department}
-                </div>
-                <div className="text-lg text-blue-300 mb-3">
-                  Supervisor: {selectedWinners[currentWinnerIndex].supervisor}
-                </div>
-                <div className="flex justify-center space-x-6 text-sm">
-                  <div className="bg-white/20 rounded-lg px-3 py-2">
-                    <span className="text-yellow-300 font-semibold">
-                      {selectedWinners[currentWinnerIndex].totalTickets} tickets
-                    </span>
+                <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-8 border border-white/40 shadow-lg">
+                  <div className="text-3xl md:text-4xl font-bold text-white mb-3">
+                    {selectedWinners[currentWinnerIndex].name}
                   </div>
-                  <div className="bg-white/20 rounded-lg px-3 py-2">
-                    <span className="text-green-300 font-semibold">
-                      NPS: {selectedWinners[currentWinnerIndex].nps}
-                    </span>
+                  <div className="text-xl text-blue-200 mb-2">
+                    {selectedWinners[currentWinnerIndex].department}
                   </div>
-                  <div className="bg-white/20 rounded-lg px-3 py-2">
-                    <span className="text-blue-300 font-semibold">
-                      NRPC: {selectedWinners[currentWinnerIndex].nrpc}
-                    </span>
+                  <div className="text-lg text-blue-300 mb-3">
+                    Supervisor: {selectedWinners[currentWinnerIndex].supervisor}
+                  </div>
+                  <div className="flex justify-center space-x-6 text-sm">
+                    <div className="bg-white/20 rounded-lg px-3 py-2">
+                      <span className="text-yellow-300 font-semibold">
+                        {selectedWinners[currentWinnerIndex].totalTickets} tickets
+                      </span>
+                    </div>
+                    <div className="bg-white/20 rounded-lg px-3 py-2">
+                      <span className="text-green-300 font-semibold">
+                        NPS: {selectedWinners[currentWinnerIndex].nps}
+                      </span>
+                    </div>
+                    <div className="bg-white/20 rounded-lg px-3 py-2">
+                      <span className="text-blue-300 font-semibold">
+                        NRPC: {selectedWinners[currentWinnerIndex].nrpc}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </motion.div>
